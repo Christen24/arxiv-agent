@@ -1,0 +1,11 @@
+pydantic
+arxiv
+PyMuPDF
+chromadb
+sentence-transformers
+rank-bm25
+tenacity
+groq
+python-dotenv
+requests
+numpy
