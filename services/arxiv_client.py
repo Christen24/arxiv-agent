@@ -68,8 +68,9 @@ def fetch_by_id(arxiv_id: str) -> Optional[PaperMetadata]:
 def search_by_topic(query: str, max_results: int = 10) -> list[PaperMetadata]:
     """Search arXiv by a topic query string. Returns up to max_results papers."""
     client = arxiv.Client()
+    advanced_query = f'ti:"{query}" OR all:"{query}"'
     search = arxiv.Search(
-        query=query,
+        query=advanced_query,
         max_results=max_results,
         sort_by=arxiv.SortCriterion.Relevance,
     )

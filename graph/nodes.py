@@ -133,6 +133,14 @@ def rank(state: AgentState) -> AgentState:
         state["_last_branch"] = "zero"
         return state
 
+    # Exact title match check
+    for candidate in candidates:
+        if candidate.title.lower() == query.lower():
+            print(f"  Exact title match: {candidate.title}")
+            state["selected_paper"] = candidate
+            state["_last_branch"] = "ranked"
+            return state
+
     texts = [query] + [c.abstract for c in candidates]
     embeddings = embed_texts(texts)
     q_emb = embeddings[0]
@@ -148,8 +156,17 @@ def rank(state: AgentState) -> AgentState:
     scored.sort(key=lambda x: (x[0], x[1].published), reverse=True)
 
     best = scored[0][1]
+    best_sim = scored[0][0]
+
+    # Low similarity rejection
+    if best_sim < 0.25:
+        print(f"  ⚠ Best candidate similarity ({best_sim:.3f}) is below threshold. Rejecting.")
+        state["errors"] = state.get("errors", []) + ["Query appears unrelated to arXiv or no relevant papers found."]
+        state["_last_branch"] = "zero"
+        return state
+
     print(f"  Ranked {len(candidates)} candidates")
-    print(f"  Selected: {best.title} (sim={scored[0][0]:.3f})")
+    print(f"  Selected: {best.title} (sim={best_sim:.3f})")
     state["selected_paper"] = best
     state["_last_branch"] = "ranked"
     return state
