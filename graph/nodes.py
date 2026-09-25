@@ -64,7 +64,7 @@ def route(state: AgentState) -> AgentState:
     return state
 
 
-# 2. RETRIEVE — search arXiv by topic
+# 2. RETRIEVE - search arXiv by topic
 
 def retrieve(state: AgentState) -> AgentState:
     """Search arXiv for candidate papers matching the active query."""

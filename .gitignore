@@ -4,3 +4,4 @@ __pycache__/
 .env
 .chroma_store/
 .pytest_cache/
+venv/
